@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
-	"path"
 	"reflect"
 	"strings"
 )
@@ -23,13 +22,13 @@ func WithRenderCreatorForDev(ctx context.Context, htmlTemplate, viteServer, work
 	return context.WithValue(ctx, renderCreatorContextKey{}, newDevRendererCreator(tmpl, viteServer, workdir)), nil
 }
 
-func WithRenderCreatorForProd(ctx context.Context, htmlTemplate string, m Manifest, assetsURLPrefix string) (context.Context, error) {
+func WithRenderCreatorForProd(ctx context.Context, htmlTemplate string, m Manifest) (context.Context, error) {
 	tmpl, err := template.New("index").Parse(htmlTemplate)
 	if err != nil {
 		return nil, err
 	}
 
-	return context.WithValue(ctx, renderCreatorContextKey{}, newProdRendererCreator(tmpl, m, assetsURLPrefix)), nil
+	return context.WithValue(ctx, renderCreatorContextKey{}, newProdRendererCreator(tmpl, m)), nil
 }
 
 func RenderCreatorFromContext(ctx context.Context) (func(ctx context.Context, handler pageHandler) (Renderer, error), error) {
@@ -145,7 +144,7 @@ type prodRendererData struct {
 	PreloadModules template.HTML
 }
 
-func newProdRendererCreator(htmlTemplate *template.Template, m Manifest, assetsURLPrefix string) func(ctx context.Context, handler pageHandler) (Renderer, error) {
+func newProdRendererCreator(htmlTemplate *template.Template, m Manifest) func(ctx context.Context, handler pageHandler) (Renderer, error) {
 	return func(ctx context.Context, handler pageHandler) (Renderer, error) {
 		chunk := m.EntryPoint(handler.EntryPoint())
 		if chunk == nil {
@@ -154,22 +153,22 @@ func newProdRendererCreator(htmlTemplate *template.Template, m Manifest, assetsU
 
 		return &prodRenderer{
 			htmlTemplate:   htmlTemplate,
-			styleSheets:    buildURLTags(`<link rel="stylesheet" href="`, `">`, assetsURLPrefix, m.StyleSheetURLs(chunk.Src)...),
-			modules:        buildURLTags(`<script type="module" src="`, `"></script>`, assetsURLPrefix, m.ModuleURL(chunk.Src)),
-			preloadModules: buildURLTags(`<link rel="modulepreload" href="`, `">`, assetsURLPrefix, m.PreloadModuleURLs(chunk.Src)...),
+			styleSheets:    buildURLTags(`<link rel="stylesheet" href="`, `">`, m.StyleSheetURLs(chunk.Src)...),
+			modules:        buildURLTags(`<script type="module" src="`, `"></script>`, m.ModuleURL(chunk.Src)),
+			preloadModules: buildURLTags(`<link rel="modulepreload" href="`, `">`, m.PreloadModuleURLs(chunk.Src)...),
 		}, nil
 	}
 }
 
-func buildURLTags(tagPrefix, tagSuffix, urlPrefix string, url ...string) template.HTML {
-	if len(url) == 0 || url[0] == "" {
+func buildURLTags(tagPrefix, tagSuffix string, urls ...string) template.HTML {
+	if len(urls) == 0 || urls[0] == "" {
 		return ""
 	}
 
 	sb := strings.Builder{}
-	for _, u := range url {
+	for _, url := range urls {
 		sb.WriteString(tagPrefix)
-		sb.WriteString(path.Join(urlPrefix, u))
+		sb.WriteString(url)
 		sb.WriteString(tagSuffix)
 	}
 	return template.HTML(sb.String())
