@@ -36,7 +36,7 @@ func main() {
 	propsTypeGenerator := govite.NewPropsTypeGenerator()
 	ctx = govite.WithPropsTypeGenerator(ctx, propsTypeGenerator)
 
-	ctx, err := govite.WithRenderCreatorForDev(ctx, htmlTemplate, viteServer, workdir)
+	ctx, err := govite.WithRenderCreatorForDev(ctx, htmlTemplate, "govite", viteServer, workdir)
 	if err != nil {
 		log.Fatal(err)
 	}
