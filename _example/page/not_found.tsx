@@ -1,4 +1,4 @@
-import type { NotFoundProps } from "~/types.gen.ts";
+import type { NotFoundProps } from "~/types.gen.page.d.ts";
 import Header from "~/components/Header";
 import "./not_found.css";
 

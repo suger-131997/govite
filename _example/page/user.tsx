@@ -1,4 +1,4 @@
-import type { UserDetailProps } from "~/types.gen.ts";
+import type { UserDetailProps } from "~/types.gen.page.d.ts";
 import Header from "~/components/Header";
 import "./user.css";
 

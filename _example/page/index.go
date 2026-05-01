@@ -2,9 +2,10 @@ package page
 
 import (
 	"context"
-	"govite"
 	"net/http"
 	"time"
+
+	"github.com/suger-131997/govite"
 )
 
 type Address struct {

@@ -1,4 +1,7 @@
 {
+  "page/about.tsx": "tmp/page/about.tsx",
+  "page/about/index.tsx": "tmp/page/about/index.tsx",
+  "page/about/nested/index.tsx": "tmp/page/about/nested/index.tsx",
   "page/index.tsx": "tmp/page/index.tsx",
   "page/not_found.tsx": "tmp/page/not_found.tsx",
   "page/user.tsx": "tmp/page/user.tsx",

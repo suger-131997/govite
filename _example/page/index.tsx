@@ -1,4 +1,4 @@
-import type { IndexProps } from "~/types.gen.ts";
+import type { IndexProps } from "~/types.gen.page.d.ts";
 import bannerImg from "~/assets/banner.png";
 import goLogo from "~/assets/go-logo.svg";
 import viteLogo from "~/assets/vite-logo.svg";

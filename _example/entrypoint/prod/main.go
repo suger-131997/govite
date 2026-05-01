@@ -1,15 +1,16 @@
 package main
 
 import (
+	"app"
 	"context"
 	"embed"
 	"encoding/json"
 	"fmt"
-	"govite"
-	app "govite/_example"
 	"io/fs"
 	"log"
 	"net/http"
+
+	"github.com/suger-131997/govite"
 )
 
 //go:embed all:dist

@@ -2,9 +2,12 @@ package app
 
 import (
 	"context"
-	"govite/_example/page"
 	"net/http"
 	"path"
+
+	"app/page"
+	"app/page/about"
+	"app/page/about/nested"
 )
 
 func NewRouter(ctx context.Context, fsHandler http.Handler) *http.ServeMux {
@@ -30,6 +33,9 @@ func NewRouter(ctx context.Context, fsHandler http.Handler) *http.ServeMux {
 
 	mux.HandleFunc("/users", page.NewUsersHandler().Handler(ctx))
 	mux.HandleFunc("/users/{id}", page.NewUserHandler().Handler(ctx))
+	mux.HandleFunc("/about", page.NewAboutHandler().Handler(ctx))
+	mux.HandleFunc("/about/nested", about.NewIndexHandler().Handler(ctx))
+	mux.HandleFunc("/about/nested/nested", nested.NewIndexHandler().Handler(ctx))
 
 	return mux
 }

@@ -2,11 +2,12 @@ package page
 
 import (
 	"context"
-	"govite"
 	"math"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/suger-131997/govite"
 )
 
 type User struct {
