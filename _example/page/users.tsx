@@ -1,4 +1,5 @@
 import type { UsersProps } from "~/types.gen.ts";
+import Header from "~/components/Header";
 import "./users.css";
 
 const statusClass: Record<string, string> = {
@@ -38,6 +39,8 @@ const UsersPage = (p: UsersProps) => {
   const endRow = Math.min(currentPage * pageSize, totalUsers);
 
   return (
+    <>
+    <Header />
     <div className="users-page">
       <header className="users-header">
         <h1>Users</h1>
@@ -137,6 +140,7 @@ const UsersPage = (p: UsersProps) => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

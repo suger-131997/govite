@@ -2,10 +2,13 @@ import type { IndexProps } from "~/types.gen.ts";
 import bannerImg from "~/assets/banner.png";
 import goLogo from "~/assets/go-logo.svg";
 import viteLogo from "~/assets/vite-logo.svg";
+import Header from "~/components/Header";
 import "./index.css";
 
 const IndexPage = (p: IndexProps) => {
   return (
+    <>
+    <Header />
     <div className="index-page">
       <img src={bannerImg} className="banner" alt="govite banner" />
 
@@ -110,6 +113,7 @@ const IndexPage = (p: IndexProps) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
