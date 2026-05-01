@@ -7,7 +7,9 @@ import goDevRunner from 'vite-plugin-go-dev-runner'
 export default defineConfig({
   plugins: [
     react(),
-    goDevRunner(),
+    goDevRunner({
+      entry: path.resolve(__dirname, "./entrypoint/dev/main.go")
+    }),
   ],
   resolve: {
     alias: {
