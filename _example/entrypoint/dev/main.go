@@ -1,14 +1,15 @@
 package main
 
 import (
+	app "app"
 	"context"
 	"flag"
 	"fmt"
-	"govite"
-	app "govite/_example"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/suger-131997/govite"
 )
 
 func main() {

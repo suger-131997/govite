@@ -2,9 +2,10 @@ package page
 
 import (
 	"context"
-	"govite"
 	"net/http"
 	"strconv"
+
+	"github.com/suger-131997/govite"
 )
 
 type UserDetailProps struct {

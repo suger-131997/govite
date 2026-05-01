@@ -2,8 +2,9 @@ package page
 
 import (
 	"context"
-	"govite"
 	"net/http"
+
+	"github.com/suger-131997/govite"
 )
 
 type NotFoundProps struct {
