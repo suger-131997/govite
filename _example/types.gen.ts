@@ -22,6 +22,10 @@ export type User = {
   joinedAt: string;
 }
 
+export type NotFoundProps = {
+  path: string;
+}
+
 export type IndexProps = {
   name: string;
   age: number;
