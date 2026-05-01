@@ -48,7 +48,7 @@ func main() {
 		port = "8080"
 	}
 	addr := ":" + port
-	fmt.Printf("Server started at http://localhost%s\n", addr)
+	fmt.Printf("Server started at http://0.0.0.0%s\n", addr)
 
 	server := &http.Server{
 		Addr:    addr,
