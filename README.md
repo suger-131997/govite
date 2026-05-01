@@ -255,4 +255,3 @@ make deploy \
 
 - Go 1.25+
 - Node.js (npm)
-- Cloud Run へのデプロイ時: [`ko`](https://ko.build)、[`gcloud` CLI](https://cloud.google.com/sdk)
