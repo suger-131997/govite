@@ -1,0 +1,29 @@
+{
+  "name": "vite-plugin-go-dev-runner",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Vite plugin to run a Go development server with hot-reload on .go file changes",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc"
+  },
+  "peerDependencies": {
+    "vite": ">=5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.2",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10"
+  }
+}
