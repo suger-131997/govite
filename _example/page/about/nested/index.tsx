@@ -2,7 +2,8 @@ import type { IndexProps } from "~/types.gen.page.about.nested.d.ts";
 import Header from "~/components/Header";
 import "../../about.css";
 
-const AboutNestedDeepPage = (p: IndexProps) => {
+
+const IndexPage = (p: IndexProps) => {
   return (
     <>
       <Header />
@@ -12,10 +13,10 @@ const AboutNestedDeepPage = (p: IndexProps) => {
           <span className="breadcrumb-sep">/</span>
           <a href="/about/nested">Nested</a>
           <span className="breadcrumb-sep">/</span>
-          <span>Deep</span>
+          <span>Nested</span>
         </div>
 
-        <h1 className="about-title">About / Nested / Deep</h1>
+        <h1 className="about-title">About / Nested / Nested</h1>
         <p className="about-message">{p.message}</p>
 
         <div className="about-card">
@@ -32,4 +33,4 @@ const AboutNestedDeepPage = (p: IndexProps) => {
   );
 };
 
-export default AboutNestedDeepPage;
+export default IndexPage;

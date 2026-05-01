@@ -2,7 +2,8 @@ import type { IndexProps } from "~/types.gen.page.about.d.ts";
 import Header from "~/components/Header";
 import "../about.css";
 
-const AboutNestedPage = (p: IndexProps) => {
+
+const  IndexPage = (p: IndexProps) => {
   return (
     <>
       <Header />
@@ -35,4 +36,5 @@ const AboutNestedPage = (p: IndexProps) => {
   );
 };
 
-export default AboutNestedPage;
+
+export default IndexPage;
