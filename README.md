@@ -1,30 +1,31 @@
 # govite
 
-A Go library for integrating Go's `net/http` with React + Vite.
+Go の `net/http` と React + Vite を統合するライブラリです。
 
-- Serve React pages from Go HTTP handlers
-- Pass typed props from Go structs to React components
-- Auto-generate TypeScript types from Go structs via reflection
-- Dev mode with Vite HMR; production mode with embedded assets
+- Go の HTTP ハンドラから React ページを提供
+- Go の構造体から型付き props を React コンポーネントへ渡す
+- リフレクションを用いて Go の構造体から TypeScript 型定義を自動生成
+- 開発時: Vite HMR、本番時: 埋め込みアセット
 
-## How it works
+## 仕組み
 
-1. Define a props struct and page handler in Go
-2. govite generates a React entry point and TypeScript types
-3. Vite bundles the frontend (dev: HMR, prod: optimized)
-4. Props are JSON-serialized and injected into the HTML as `window.APP_PROPS`
+1. Go 側で props の構造体とページハンドラを定義する
+2. govite が React エントリーポイントと TypeScript 型定義を自動生成する
+3. Vite がフロントエンドをバンドルする（開発時: HMR、本番時: 最適化ビルド）
+4. props は JSON にシリアライズされ、`window.APP_PROPS` として HTML に埋め込まれる
 
-## Usage
+## 使い方
 
-### 1. Define a page handler
+### 1. ページハンドラを定義する
 
 ```go
 package page
 
 import (
     "context"
-    "govite"
     "net/http"
+
+    "github.com/suger-131997/govite"
 )
 
 type IndexProps struct {
@@ -32,7 +33,7 @@ type IndexProps struct {
 }
 
 func NewIndexHandler() *govite.PageHandler[IndexProps] {
-    return govite.NewPageHandler[IndexProps](govite.PageHandlerArgs[IndexProps]{
+    return govite.NewPageHandler[IndexProps](govite.PageHandlerConfig[IndexProps]{
         EntryPoint: "page/index.tsx",
         HandleFunc: func(r *http.Request, render func(ctx context.Context, props IndexProps)) {
             render(r.Context(), IndexProps{Name: "world"})
@@ -41,45 +42,67 @@ func NewIndexHandler() *govite.PageHandler[IndexProps] {
 }
 ```
 
-### 2. Write the React component
+### 2. React コンポーネントを書く
+
+型ファイルのパスは `types.gen.{パッケージパス}.d.ts` の形式で生成されます（例: `page` パッケージなら `types.gen.page.d.ts`）。
 
 ```tsx
 // page/index.tsx
-import type { IndexProps } from "~/types.gen.ts"
+import type { IndexProps } from "~/types.gen.page.d.ts"
 
 export default function IndexPage({ name }: IndexProps) {
     return <h1>Hello, {name}!</h1>
 }
 ```
 
-### 3. Set up dev and prod entrypoints
+### 3. コンテキストのオプション
 
-See [`_example/`](./_example) for a complete working example.
+| 関数 | 説明 |
+|---|---|
+| `govite.WithTitle(ctx, "タイトル")` | ページの `<title>` を動的に設定する |
+| `govite.WithStatusCode(ctx, 404)` | レスポンスの HTTP ステータスコードを設定する |
 
-## Development
+### 4. 開発・本番エントリーポイントのセットアップ
 
-```bash
-# Install dependencies
-go mod download
-npm install --prefix _example
+完全な動作例は [`_example/`](./_example) を参照してください。
 
-# Start dev server (Vite on :5173, Go on :8080)
-cd _example && make dev
-```
+## セットアップ
 
-## Production build
+### 依存関係のインストール
 
 ```bash
-cd _example && make run
+cd _example
+npm install
 ```
 
-This will:
-1. Generate `entries.gen.json` and `types.gen.ts`
-2. Run `tsc -b` and `vite build`
-3. Compile a self-contained Go binary with embedded assets
+### 開発サーバーの起動
 
-## Requirements
+```bash
+npm run dev
+```
+
+Vite サーバー（`:5173`）が起動し、付属の `vite-plugin-go-dev-runner` が Go サーバー（`:8080`）を自動的に起動・管理します。`.go` ファイルの変更を検知すると Go サーバーが自動で再起動されます。
+
+### 本番ビルド
+
+```bash
+npm run build
+```
+
+このコマンドは以下を順番に実行します。
+
+1. Go を `-gen` フラグ付きで実行し、`entries.gen.json` と `types.gen.*.d.ts` を生成
+2. `tsc -b` で TypeScript をコンパイル
+3. `vite build` でフロントエンドをバンドル
+4. Go バイナリ（アセット埋め込み済み）をビルド
+
+### 本番サーバーの起動
+
+```bash
+.bin/main
+```
+
+## 要件
 
 - Go 1.25+
 - Node.js (npm)
-- [air](https://github.com/air-verse/air) — for live reload in dev
