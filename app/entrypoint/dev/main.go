@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"govite"
-	app "govite/_example"
+	app "govite/app"
 	"log"
 	"net/http"
 	"os"

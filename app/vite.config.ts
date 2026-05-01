@@ -50,19 +50,18 @@ export default defineConfig({
           }
         })
 
+      const serverClose = () => {
+        server.close()
+      }
+        process.on('SIGINT', serverClose)
+        process.on('SIGTERM', serverClose)
+
         server.httpServer?.on('close', () => {
           stopGoServer(goProcess)
+          process.off("SIGINT", serverClose);
+          process.off("SIGTERM", serverClose);
         })
 
-        process.on('exit', () => stopGoServer(goProcess))
-        process.on('SIGINT', () => {
-          stopGoServer(goProcess)
-          process.exit()
-        })
-        process.on('SIGTERM', () => {
-          stopGoServer(goProcess)
-          process.exit()
-        })
       },
     },
   ],

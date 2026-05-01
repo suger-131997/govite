@@ -2,7 +2,7 @@ package app
 
 import (
 	"context"
-	"govite/_example/page"
+	"govite/app/page"
 	"net/http"
 )
 
