@@ -81,7 +81,7 @@ func newDevRendererCreator(htmlTemplate *template.Template, defaultTitle, viteSe
 			return nil, err
 		}
 
-		propsTypeGenerator, err := PropsTypeGeneratorFromContext(ctx)
+		propsTypeGenerator, err := PropsTypeDefGeneratorFromContext(ctx)
 		if err != nil {
 			return nil, err
 		}

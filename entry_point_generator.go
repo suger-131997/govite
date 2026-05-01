@@ -73,7 +73,7 @@ func (g *EntryPointGenerator) Generate(entryPoint string) error {
 	return nil
 }
 
-func (g *EntryPointGenerator) GenerateEntryPointConfig() error {
+func (g *EntryPointGenerator) GenerateConfig() error {
 	m := make(map[string]string, len(g.entryPoints))
 
 	for entryPoint := range g.entryPoints {

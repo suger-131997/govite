@@ -33,7 +33,7 @@ func main() {
 	entryPointGenerator := govite.NewEntryPointGenerator(workdir, entryPointTmpl)
 	ctx = govite.WithEntryPointGenerator(ctx, entryPointGenerator)
 
-	propsTypeGenerator := govite.NewPropsTypeGenerator()
+	propsTypeGenerator := govite.NewPropsTypeDefGenerator()
 	ctx = govite.WithPropsTypeGenerator(ctx, propsTypeGenerator)
 
 	ctx, err := govite.WithRenderCreatorForDev(ctx, htmlTemplate, "govite", viteServer, workdir)
@@ -45,11 +45,11 @@ func main() {
 
 	mux.Handle("/assets/", http.FileServerFS(os.DirFS(".")))
 
-	if err := entryPointGenerator.GenerateEntryPointConfig(); err != nil {
+	if err := entryPointGenerator.GenerateConfig(); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := propsTypeGenerator.GenerateTypeScriptPropsTypes(); err != nil {
+	if err := propsTypeGenerator.Generate(); err != nil {
 		log.Fatal(err)
 	}
 
