@@ -18,7 +18,7 @@ const AboutPage = (p: AboutProps) => {
           <h2>ネストされたルート</h2>
           <p>このページは <code>/about</code> にあります。</p>
           <p>
-            <a href="/about/IndexPage" className="about-link">
+            <a href="/about/nested" className="about-link">
               /about/nested を見る →
             </a>
           </p>

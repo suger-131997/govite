@@ -2,6 +2,7 @@ import type { IndexProps } from "~/types.gen.page.about.d.ts";
 import Header from "~/components/Header";
 import "../about.css";
 
+
 const  IndexPage = (p: IndexProps) => {
   return (
     <>
@@ -34,5 +35,6 @@ const  IndexPage = (p: IndexProps) => {
     </>
   );
 };
+
 
 export default IndexPage;

@@ -2,6 +2,7 @@ import type { IndexProps } from "~/types.gen.page.about.nested.d.ts";
 import Header from "~/components/Header";
 import "../../about.css";
 
+
 const IndexPage = (p: IndexProps) => {
   return (
     <>
