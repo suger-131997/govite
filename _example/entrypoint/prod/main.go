@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"govite"
-	app "govite/app"
+	app "govite/_example"
 	"io/fs"
 	"log"
 	"net/http"

@@ -1,8 +1,8 @@
-package app
+package _example
 
 import (
 	"context"
-	"govite/app/page"
+	"govite/_example/page"
 	"net/http"
 )
 
