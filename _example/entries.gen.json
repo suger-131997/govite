@@ -1,4 +1,5 @@
 {
   "page/index.tsx": "tmp/page/index.tsx",
+  "page/user.tsx": "tmp/page/user.tsx",
   "page/users.tsx": "tmp/page/users.tsx"
 }

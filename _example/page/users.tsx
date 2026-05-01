@@ -65,7 +65,9 @@ const UsersPage = (p: UsersProps) => {
             {users.map((user) => (
               <tr key={user.id}>
                 <td className="col-id">{user.id}</td>
-                <td className="col-name">{user.name}</td>
+                <td className="col-name">
+                  <a href={`/users/${user.id}`} className="user-link">{user.name}</a>
+                </td>
                 <td className="col-email">{user.email}</td>
                 <td>{user.role}</td>
                 <td>

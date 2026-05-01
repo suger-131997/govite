@@ -105,6 +105,16 @@ body {
   white-space: nowrap;
 }
 
+.user-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.user-link:hover {
+  text-decoration: underline;
+}
+
 /* Status badges */
 
 .status-badge {

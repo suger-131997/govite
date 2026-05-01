@@ -1,0 +1,199 @@
+.user-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Breadcrumb */
+
+.user-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.user-breadcrumb a {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.user-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  color: #d1d5db;
+}
+
+/* User card (avatar + name) */
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.user-avatar {
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: #4f46e5;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.user-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.user-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.2em 0.65em;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.2em 0.65em;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-active {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.status-inactive {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.status-pending {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+/* Detail grid */
+
+.detail-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.detail-section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.section-title {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.detail-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row dt {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.detail-row dd {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.email-link {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.email-link:hover {
+  text-decoration: underline;
+}
+
+/* Actions */
+
+.user-actions {
+  margin-top: 1.5rem;
+}
+
+.back-link {
+  font-size: 0.875rem;
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* 404 */
+
+.not-found {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.not-found-code {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #e5e7eb;
+  margin: 0;
+  line-height: 1;
+}
+
+.not-found-msg {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin: 0.5rem 0 1.5rem;
+}

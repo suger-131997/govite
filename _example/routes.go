@@ -22,6 +22,7 @@ func NewRouter(ctx context.Context, fsHandler http.Handler) *http.ServeMux {
 	}())
 
 	mux.HandleFunc("/users", page.NewUsersHandler().Handler(ctx))
+	mux.HandleFunc("/users/{id}", page.NewUserHandler().Handler(ctx))
 
 	return mux
 }
