@@ -112,7 +112,7 @@ func (r *devRenderer) Render(ctx context.Context, props any) ([]byte, error) {
 
 	title, ok := TitleFromContext(ctx)
 	if !ok {
-		title = "Default App Title"
+		title = r.defaultTitle
 	}
 
 	data := devRendererData{

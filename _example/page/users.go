@@ -88,6 +88,9 @@ func NewUsersHandler() *govite.PageHandler[UsersProps] {
 	return govite.NewPageHandler[UsersProps](govite.PageHandlerConfig[UsersProps]{
 		EntryPoint: "page/users.tsx",
 		HandleFunc: func(r *http.Request, render func(ctx context.Context, props UsersProps)) {
+			ctx := r.Context()
+			ctx = govite.WithTitle(ctx, "Go + Vite Demo: Users")
+
 			const defaultPageSize = 10
 
 			page := 1
@@ -116,7 +119,7 @@ func NewUsersHandler() *govite.PageHandler[UsersProps] {
 				end = total
 			}
 
-			render(r.Context(), UsersProps{
+			render(ctx, UsersProps{
 				Users:       dummyUsers[start:end],
 				CurrentPage: page,
 				TotalPages:  totalPages,

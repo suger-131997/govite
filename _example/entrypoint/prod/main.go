@@ -35,7 +35,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ctx, err = govite.WithRenderCreatorForProd(ctx, htmlTemplate, "govite", m)
+	ctx, err = govite.WithRenderCreatorForProd(ctx, htmlTemplate, "Go + Vite Demo", m)
 	if err != nil {
 		log.Fatal(err)
 	}
