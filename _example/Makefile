@@ -8,7 +8,7 @@ KO_DOCKER_REPO ?= gcr.io/$(PROJECT_ID)
 ## deploy: フロントエンドをビルドし、ko でイメージをビルド・プッシュして Cloud Run にデプロイする
 deploy:
 	npm install
-	npm run build:cloudrun
+	npm run build:frontend
 	IMAGE=$$(KO_DOCKER_REPO=$(KO_DOCKER_REPO) ko build ./entrypoint/prod) && \
 	gcloud run deploy $(SERVICE) \
 		--image=$$IMAGE \

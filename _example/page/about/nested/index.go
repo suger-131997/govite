@@ -15,7 +15,10 @@ func NewIndexHandler() *govite.PageHandler[IndexProps] {
 	return govite.NewPageHandler[IndexProps](govite.PageHandlerConfig[IndexProps]{
 		EntryPoint: "page/about/nested/index.tsx",
 		HandleFunc: func(r *http.Request, render func(ctx context.Context, props IndexProps)) {
-			render(r.Context(), IndexProps{
+			ctx := r.Context()
+			ctx = govite.WithTitle(ctx, "Go + Vite Demo: Nested Nested About")
+
+			render(ctx, IndexProps{
 				Message: "これは About / Nested のさらに深いページです。",
 			})
 		},

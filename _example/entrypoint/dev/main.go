@@ -14,7 +14,7 @@ import (
 
 func main() {
 	var (
-		isGenMode = flag.Bool("gen", false, "run in development mode")
+		isGenMode = flag.Bool("gen", false, "generate entry points and type definitions, then exit")
 	)
 	flag.Parse()
 
@@ -58,12 +58,18 @@ func main() {
 		return
 	}
 
-	port := ":8080"
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	addr := ":" + port
+	fmt.Printf("Server started at http://localhost:%s\n", port)
+
 	server := &http.Server{
-		Addr:    "localhost:8080",
+		Addr:    addr,
 		Handler: mux,
 	}
-	fmt.Printf("Server started at http://localhost%s\n", port)
+
 	log.Fatal(server.ListenAndServe())
 }
 

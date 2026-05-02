@@ -27,6 +27,52 @@ type UsersProps struct {
 	PageSize    int    `json:"pageSize"`
 }
 
+func NewUsersHandler() *govite.PageHandler[UsersProps] {
+	return govite.NewPageHandler[UsersProps](govite.PageHandlerConfig[UsersProps]{
+		EntryPoint: "page/users.tsx",
+		HandleFunc: func(r *http.Request, render func(ctx context.Context, props UsersProps)) {
+			ctx := r.Context()
+			ctx = govite.WithTitle(ctx, "Go + Vite Demo: Users")
+
+			const defaultPageSize = 10
+
+			page := 1
+			if p := r.URL.Query().Get("page"); p != "" {
+				if n, err := strconv.Atoi(p); err == nil && n > 0 {
+					page = n
+				}
+			}
+
+			pageSize := defaultPageSize
+			if s := r.URL.Query().Get("pageSize"); s != "" {
+				if n, err := strconv.Atoi(s); err == nil && n > 0 && n <= 50 {
+					pageSize = n
+				}
+			}
+
+			total := len(dummyUsers)
+			totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+			if page > totalPages {
+				page = totalPages
+			}
+
+			start := (page - 1) * pageSize
+			end := start + pageSize
+			if end > total {
+				end = total
+			}
+
+			render(ctx, UsersProps{
+				Users:       dummyUsers[start:end],
+				CurrentPage: page,
+				TotalPages:  totalPages,
+				TotalUsers:  total,
+				PageSize:    pageSize,
+			})
+		},
+	})
+}
+
 var dummyUsers = func() []User {
 	names := []string{
 		"Alice Johnson", "Bob Smith", "Carol Williams", "David Brown", "Eve Davis",
@@ -83,50 +129,4 @@ func generateEmail(name string) string {
 		}
 	}
 	return email + "@example.com"
-}
-
-func NewUsersHandler() *govite.PageHandler[UsersProps] {
-	return govite.NewPageHandler[UsersProps](govite.PageHandlerConfig[UsersProps]{
-		EntryPoint: "page/users.tsx",
-		HandleFunc: func(r *http.Request, render func(ctx context.Context, props UsersProps)) {
-			ctx := r.Context()
-			ctx = govite.WithTitle(ctx, "Go + Vite Demo: Users")
-
-			const defaultPageSize = 10
-
-			page := 1
-			if p := r.URL.Query().Get("page"); p != "" {
-				if n, err := strconv.Atoi(p); err == nil && n > 0 {
-					page = n
-				}
-			}
-
-			pageSize := defaultPageSize
-			if s := r.URL.Query().Get("pageSize"); s != "" {
-				if n, err := strconv.Atoi(s); err == nil && n > 0 && n <= 50 {
-					pageSize = n
-				}
-			}
-
-			total := len(dummyUsers)
-			totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
-			if page > totalPages {
-				page = totalPages
-			}
-
-			start := (page - 1) * pageSize
-			end := start + pageSize
-			if end > total {
-				end = total
-			}
-
-			render(ctx, UsersProps{
-				Users:       dummyUsers[start:end],
-				CurrentPage: page,
-				TotalPages:  totalPages,
-				TotalUsers:  total,
-				PageSize:    pageSize,
-			})
-		},
-	})
 }

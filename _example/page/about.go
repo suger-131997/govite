@@ -15,7 +15,10 @@ func NewAboutHandler() *govite.PageHandler[AboutProps] {
 	return govite.NewPageHandler[AboutProps](govite.PageHandlerConfig[AboutProps]{
 		EntryPoint: "page/about.tsx",
 		HandleFunc: func(r *http.Request, render func(ctx context.Context, props AboutProps)) {
-			render(r.Context(), AboutProps{
+			ctx := r.Context()
+			ctx = govite.WithTitle(ctx, "Go + Vite Demo: About")
+
+			render(ctx, AboutProps{
 				Message: "これは About ページです。",
 			})
 		},
