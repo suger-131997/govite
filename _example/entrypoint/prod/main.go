@@ -43,11 +43,15 @@ func main() {
 
 	mux := app.NewRouter(ctx, http.FileServerFS(distFS))
 
-	port := ":8080"
-	fmt.Printf("Server started at http://localhost%s\n", port)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	addr := ":" + port
+	fmt.Printf("Server started at http://0.0.0.0%s\n", addr)
 
 	server := &http.Server{
-		Addr:    "localhost:8080",
+		Addr:    addr,
 		Handler: mux,
 	}
 

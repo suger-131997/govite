@@ -224,6 +224,33 @@ npm run build   # entries.gen.json と型定義を生成 → tsc → vite build 
 npm run preview # ビルド済みバイナリを実行
 ```
 
+### Cloud Run へのデプロイ
+
+[`ko`](https://ko.build) を使ってイメージをビルドし、Cloud Run にデプロイします。
+
+```bash
+cd _example
+
+# デフォルト設定でデプロイ（gcloud のデフォルトプロジェクトを使用）
+make deploy
+
+# プロジェクト・リージョン・サービス名・イメージリポジトリを指定する場合
+make deploy \
+  PROJECT_ID=my-project \
+  REGION=us-central1 \
+  SERVICE=my-service \
+  KO_DOCKER_REPO=us-docker.pkg.dev/my-project/my-repo
+```
+
+`make deploy` は以下のステップを実行します。
+
+1. `npm install` — npm パッケージのインストール
+2. `go run entrypoint/dev/main.go -gen` — エントリポイント TSX と TypeScript 型定義を生成
+3. `npx tsc -b` — TypeScript のコンパイル
+4. `npx vite build` — フロントエンドアセットのビルド（`entrypoint/prod/dist/` に出力）
+5. `ko build ./entrypoint/prod` — Go バイナリと埋め込みアセットをコンテナイメージとしてビルド・プッシュ
+6. `gcloud run deploy` — Cloud Run へのデプロイ
+
 ## 要件
 
 - Go 1.25+
