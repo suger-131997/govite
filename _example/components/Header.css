@@ -10,8 +10,7 @@
   display: flex;
   align-items: center;
   gap: 2rem;
-  max-width: 1100px;
-  margin: 0 auto;
+  max-width: var(--content-width);
   padding: 0 1.5rem;
   height: 3.5rem;
 }

@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepare": "tsc"
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "vite": ">=5.0.0"

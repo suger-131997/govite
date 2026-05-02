@@ -1,4 +1,6 @@
 :root {
+    --content-width: 1100px;
+
     --text: #6b6375;
     --text-h: #08060d;
     --bg: #fff;
@@ -24,6 +26,8 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    scrollbar-gutter: stable;
 
     @media (max-width: 1024px) {
         font-size: 16px;
@@ -51,7 +55,7 @@
 }
 
 #root {
-    width: 1126px;
+    width: calc(var(--content-width) + 26px);
     max-width: 100%;
     margin: 0 auto;
     text-align: center;
