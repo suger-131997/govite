@@ -6,25 +6,24 @@ import (
 	"net/http"
 )
 
-// PageHandler is a generic HTTP page handler parameterized by the props type T.
-// It delegates request processing to a user-supplied function and uses the
-// renderer attached to the context to produce an HTML response.
+// PageHandler は props の型 T をパラメーターとするジェネリックな HTTP ページハンドラーです。
+// リクエスト処理をユーザーが提供する関数に委譲し、コンテキストに付与されたレンダラーを使って
+// HTML レスポンスを生成します。
 type PageHandler[T any] struct {
 	entryPoint string
 	handleFunc func(r *http.Request, render func(ctx context.Context, props T))
 }
 
-// PageHandlerConfig holds the configuration for [NewPageHandler].
+// PageHandlerConfig は [NewPageHandler] の設定を保持します。
 type PageHandlerConfig[T any] struct {
-	// EntryPoint is the relative path to the Vite entry point file (e.g. "pages/index.ts").
+	// EntryPoint は Vite のエントリーポイントファイルへの相対パスです (例: "pages/index.ts")。
 	EntryPoint string
-	// HandleFunc is the application logic for the page. It receives the HTTP
-	// request and a render callback; calling render with a context and props
-	// triggers HTML generation and writes the response.
+	// HandleFunc はページのアプリケーションロジックです。HTTP リクエストとレンダーコールバックを受け取り、
+	// コンテキストと props を渡してレンダーコールバックを呼び出すと HTML 生成とレスポンス書き込みが行われます。
 	HandleFunc func(r *http.Request, render func(ctx context.Context, props T))
 }
 
-// NewPageHandler creates a new [PageHandler] from the given configuration.
+// NewPageHandler は指定した設定から新しい [PageHandler] を生成して返します。
 func NewPageHandler[T any](args PageHandlerConfig[T]) *PageHandler[T] {
 	return &PageHandler[T]{
 		entryPoint: args.EntryPoint,
@@ -32,9 +31,9 @@ func NewPageHandler[T any](args PageHandlerConfig[T]) *PageHandler[T] {
 	}
 }
 
-// Handler returns an [net/http.HandlerFunc] that processes incoming requests by
-// invoking the handler's HandleFunc. It panics if a [Renderer] cannot be
-// created from ctx. The renderer is created once and reused for every request.
+// Handler はハンドラーの HandleFunc を呼び出してリクエストを処理する [net/http.HandlerFunc] を返します。
+// ctx から [Renderer] を生成できない場合はパニックします。
+// レンダラーは一度だけ生成され、以降のリクエストで再利用されます。
 func (h *PageHandler[T]) Handler(ctx context.Context) http.HandlerFunc {
 	rendererCreator, err := RenderCreatorFromContext(ctx)
 	if err != nil {
@@ -69,12 +68,11 @@ func (h *PageHandler[T]) Handler(ctx context.Context) http.HandlerFunc {
 	}
 }
 
-// EntryPoint returns the Vite entry point path associated with this handler.
+// EntryPoint はこのハンドラーに関連付けられた Vite のエントリーポイントパスを返します。
 func (h *PageHandler[T]) EntryPoint() string {
 	return h.entryPoint
 }
 
-// DescribeProps is a no-op method whose sole purpose is to capture the props
-// type T via reflection during development-mode renderer setup. It must not be
-// removed.
+// DescribeProps は何も行わないメソッドです。開発モードのレンダラーセットアップ時に
+// リフレクションで props の型 T を取得するためだけに存在します。削除しないでください。
 func (h *PageHandler[T]) DescribeProps(t T) {}

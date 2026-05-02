@@ -1,23 +1,22 @@
-// Package govite provides integration between Go HTTP servers and Vite,
-// enabling server-side rendering with type-safe props passing from Go to
-// frontend components, and automatic TypeScript type definition generation.
+// Package govite は Go の HTTP サーバーと Vite を統合するパッケージです。
+// Go からフロントエンドコンポーネントへの型安全な props の受け渡しと、
+// TypeScript の型定義ファイルの自動生成をサポートします。
 //
-// # Overview
+// # 概要
 //
-// govite bridges a Go HTTP backend with a Vite-powered frontend. It supports
-// two rendering modes:
-//   - Development mode: proxies asset requests to the Vite dev server and
-//     generates entry point files on-the-fly.
-//   - Production mode: uses the Vite build manifest to inject the correct
-//     hashed asset URLs into the HTML response.
+// govite は Go の HTTP バックエンドと Vite ベースのフロントエンドを橋渡しします。
+// 以下の 2 つのレンダリングモードに対応しています:
+//   - 開発モード: アセットのリクエストを Vite 開発サーバーにプロキシし、
+//     エントリーポイントファイルをオンザフライで生成します。
+//   - 本番モード: Vite のビルドマニフェストを利用してハッシュ付きアセット URL を
+//     HTML レスポンスに埋め込みます。
 //
-// # Usage
+// # 使い方
 //
-// Use [WithRenderCreatorForDev] or [WithRenderCreatorForProd] to attach a
-// renderer factory to a [context.Context], then create page handlers with
-// [NewPageHandler] and obtain their [net/http.HandlerFunc] via
-// [PageHandler.Handler].
+// [WithRenderCreatorForDev] または [WithRenderCreatorForProd] でレンダラーファクトリーを
+// [context.Context] に付与し、[NewPageHandler] でページハンドラーを作成したうえで、
+// [PageHandler.Handler] から [net/http.HandlerFunc] を取得してください。
 //
-// Page-specific values such as the HTTP status code and title can be passed
-// through the context using [WithStatusCode] and [WithTitle].
+// HTTP ステータスコードやページタイトルなどのページ固有の値は、
+// [WithStatusCode] や [WithTitle] を使ってコンテキスト経由で渡せます。
 package govite

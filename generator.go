@@ -16,11 +16,10 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-// EntryPointGenerator generates Vite entry point source files from a template.
-// Each unique entry point is written once under workdir and tracked to avoid
-// duplicates. Call [EntryPointGenerator.GenerateConfig] after all entry points
-// have been generated to write the entries.gen.json file consumed by the Vite
-// plugin.
+// EntryPointGenerator はテンプレートから Vite のエントリーポイントソースファイルを生成します。
+// 同一のエントリーポイントは workdir 以下に一度だけ書き込まれ、重複が防がれます。
+// すべてのエントリーポイントを生成したあとに [EntryPointGenerator.GenerateConfig] を呼び出すと、
+// Vite プラグインが読み込む entries.gen.json が書き出されます。
 type EntryPointGenerator struct {
 	workdir  string
 	rootTmpl *template.Template
@@ -28,10 +27,9 @@ type EntryPointGenerator struct {
 	entryPoints map[string]struct{}
 }
 
-// NewEntryPointGenerator creates a new EntryPointGenerator that writes entry
-// point files under workdir using entryPointTmpl as the file template.
-// The template receives a map with a single key "EntryPoint" containing the
-// relative path of the entry point.
+// NewEntryPointGenerator は新しい EntryPointGenerator を生成します。
+// エントリーポイントファイルは workdir 以下に entryPointTmpl をテンプレートとして書き出されます。
+// テンプレートにはエントリーポイントの相対パスを値に持つキー "EntryPoint" が渡されます。
 func NewEntryPointGenerator(workdir, entryPointTmpl string) *EntryPointGenerator {
 	return &EntryPointGenerator{
 		workdir:     workdir,
@@ -42,16 +40,15 @@ func NewEntryPointGenerator(workdir, entryPointTmpl string) *EntryPointGenerator
 
 type entryPointGeneratorContextKey struct{}
 
-// WithEntryPointGenerator stores the given [EntryPointGenerator] in ctx and
-// returns the new context. Retrieve it later with
-// [EntryPointGeneratorFromContext].
+// WithEntryPointGenerator は指定した [EntryPointGenerator] を ctx に格納し、
+// 新しいコンテキストを返します。取り出すには [EntryPointGeneratorFromContext] を使用してください。
 func WithEntryPointGenerator(ctx context.Context, generator *EntryPointGenerator) context.Context {
 	return context.WithValue(ctx, entryPointGeneratorContextKey{}, generator)
 }
 
-// EntryPointGeneratorFromContext retrieves the [EntryPointGenerator] stored in
-// ctx by [WithEntryPointGenerator]. It returns an error if no generator is
-// found or if the stored value has an unexpected type.
+// EntryPointGeneratorFromContext は [WithEntryPointGenerator] によって ctx に格納された
+// [EntryPointGenerator] を取り出します。
+// ジェネレーターが見つからない場合、または格納された値の型が不正な場合はエラーを返します。
 func EntryPointGeneratorFromContext(ctx context.Context) (*EntryPointGenerator, error) {
 	value := ctx.Value(entryPointGeneratorContextKey{})
 	if value == nil {
@@ -64,9 +61,8 @@ func EntryPointGeneratorFromContext(ctx context.Context) (*EntryPointGenerator, 
 	return generator, nil
 }
 
-// Generate writes an entry point file for entryPoint under the generator's
-// workdir. It returns an error if the entry point was already generated or if
-// a filesystem operation fails.
+// Generate はジェネレーターの workdir 以下に entryPoint のファイルを書き出します。
+// 同じエントリーポイントがすでに生成済みの場合、またはファイルシステム操作が失敗した場合はエラーを返します。
 func (g *EntryPointGenerator) Generate(entryPoint string) error {
 	if _, ok := g.entryPoints[entryPoint]; ok {
 		return errors.New("entry point already exists")
@@ -97,9 +93,9 @@ func (g *EntryPointGenerator) Generate(entryPoint string) error {
 	return nil
 }
 
-// GenerateConfig writes entries.gen.json to the current working directory.
-// The file maps each registered entry point name to its absolute path and is
-// read by the Vite plugin to configure build inputs.
+// GenerateConfig はカレントディレクトリに entries.gen.json を書き出します。
+// このファイルは登録済みエントリーポイント名と絶対パスのマッピングを持ち、
+// Vite プラグインがビルド入力の設定に使用します。
 func (g *EntryPointGenerator) GenerateConfig() error {
 	m := make(map[string]string, len(g.entryPoints))
 
@@ -120,14 +116,14 @@ func (g *EntryPointGenerator) GenerateConfig() error {
 	return nil
 }
 
-// PropsTypeDefGenerator collects Go [reflect.Type] values and generates
-// corresponding TypeScript type definition files (*.d.ts). Types are grouped
-// by package path so that one .d.ts file is produced per package.
+// PropsTypeDefGenerator は Go の [reflect.Type] を収集し、
+// 対応する TypeScript の型定義ファイル (*.d.ts) を生成します。
+// 型はパッケージパスでグループ化され、パッケージごとに 1 つの .d.ts ファイルが生成されます。
 type PropsTypeDefGenerator struct {
 	propsTypes []reflect.Type
 }
 
-// NewPropsTypeDefGenerator creates a new, empty PropsTypeDefGenerator.
+// NewPropsTypeDefGenerator は空の PropsTypeDefGenerator を生成して返します。
 func NewPropsTypeDefGenerator() *PropsTypeDefGenerator {
 	return &PropsTypeDefGenerator{
 		propsTypes: make([]reflect.Type, 0),
@@ -136,16 +132,15 @@ func NewPropsTypeDefGenerator() *PropsTypeDefGenerator {
 
 type propsTypeDefGeneratorContextKey struct{}
 
-// WithPropsTypeGenerator stores the given [PropsTypeDefGenerator] in ctx and
-// returns the new context. Retrieve it later with
-// [PropsTypeDefGeneratorFromContext].
+// WithPropsTypeGenerator は指定した [PropsTypeDefGenerator] を ctx に格納し、
+// 新しいコンテキストを返します。取り出すには [PropsTypeDefGeneratorFromContext] を使用してください。
 func WithPropsTypeGenerator(ctx context.Context, generator *PropsTypeDefGenerator) context.Context {
 	return context.WithValue(ctx, propsTypeDefGeneratorContextKey{}, generator)
 }
 
-// PropsTypeDefGeneratorFromContext retrieves the [PropsTypeDefGenerator] stored
-// in ctx by [WithPropsTypeGenerator]. It returns an error if no generator is
-// found or if the stored value has an unexpected type.
+// PropsTypeDefGeneratorFromContext は [WithPropsTypeGenerator] によって ctx に格納された
+// [PropsTypeDefGenerator] を取り出します。
+// ジェネレーターが見つからない場合、または格納された値の型が不正な場合はエラーを返します。
 func PropsTypeDefGeneratorFromContext(ctx context.Context) (*PropsTypeDefGenerator, error) {
 	value := ctx.Value(propsTypeDefGeneratorContextKey{})
 	if value == nil {
@@ -158,16 +153,15 @@ func PropsTypeDefGeneratorFromContext(ctx context.Context) (*PropsTypeDefGenerat
 	return generator, nil
 }
 
-// RegisterPropsType adds rt to the list of types for which TypeScript
-// definitions will be generated when [PropsTypeDefGenerator.Generate] is called.
+// RegisterPropsType は [PropsTypeDefGenerator.Generate] 呼び出し時に TypeScript の型定義を
+// 生成する対象として rt を登録します。
 func (g *PropsTypeDefGenerator) RegisterPropsType(rt reflect.Type) {
 	g.propsTypes = append(g.propsTypes, rt)
 }
 
-// Generate writes TypeScript type definition files for all registered props
-// types. One file per package is created with the name pattern
-// types.gen.<pkg>.d.ts (e.g. types.gen.mypkg.mysubpkg.d.ts). Existing files
-// are overwritten.
+// Generate は登録済みのすべての props 型に対して TypeScript の型定義ファイルを書き出します。
+// パッケージごとに types.gen.<pkg>.d.ts という名前のファイルが生成されます
+// (例: types.gen.mypkg.mysubpkg.d.ts)。既存のファイルは上書きされます。
 func (g *PropsTypeDefGenerator) Generate() error {
 	grouping := make(map[string][]reflect.Type)
 
@@ -219,7 +213,7 @@ func generatePropsTypeDef(pkgName string, propsTypes []reflect.Type) error {
 
 			typeName := t.Name()
 			if typeName == "" {
-				// Anonymous struct
+				// 匿名構造体
 				var s bytes.Buffer
 				s.WriteString("{\n")
 				for i := range t.NumField() {
