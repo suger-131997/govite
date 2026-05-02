@@ -19,7 +19,7 @@ import (
 // EntryPointGenerator はテンプレートから Vite のエントリーポイントソースファイルを生成します。
 // 同一のエントリーポイントは workdir 以下に一度だけ書き込まれ、重複が防がれます。
 // すべてのエントリーポイントを生成したあとに [EntryPointGenerator.GenerateConfig] を呼び出すと、
-// Vite プラグインが読み込む entries.gen.json が書き出されます。
+// vite.config.ts が読み込む entries.gen.json が書き出されます。
 type EntryPointGenerator struct {
 	workdir  string
 	rootTmpl *template.Template
@@ -28,8 +28,7 @@ type EntryPointGenerator struct {
 }
 
 // NewEntryPointGenerator は新しい EntryPointGenerator を生成します。
-// エントリーポイントファイルは workdir 以下に entryPointTmpl をテンプレートとして書き出されます。
-// テンプレートにはエントリーポイントの相対パスを値に持つキー "EntryPoint" が渡されます。
+// エントリーポイントファイルは workdir 以下書き出されます。entryPointTmpl をテンプレートとして使用します。
 func NewEntryPointGenerator(workdir, entryPointTmpl string) *EntryPointGenerator {
 	return &EntryPointGenerator{
 		workdir:     workdir,
@@ -95,7 +94,7 @@ func (g *EntryPointGenerator) Generate(entryPoint string) error {
 
 // GenerateConfig はカレントディレクトリに entries.gen.json を書き出します。
 // このファイルは登録済みエントリーポイント名と絶対パスのマッピングを持ち、
-// Vite プラグインがビルド入力の設定に使用します。
+// vite.config.ts でビルド入力の設定に使用します。
 func (g *EntryPointGenerator) GenerateConfig() error {
 	m := make(map[string]string, len(g.entryPoints))
 

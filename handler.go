@@ -35,17 +35,21 @@ func NewPageHandler[T any](args PageHandlerConfig[T]) *PageHandler[T] {
 // ctx から [Renderer] を生成できない場合はパニックします。
 // レンダラーは一度だけ生成され、以降のリクエストで再利用されます。
 func (h *PageHandler[T]) Handler(ctx context.Context) http.HandlerFunc {
-	rendererCreator, err := RenderCreatorFromContext(ctx)
-	if err != nil {
-		panic(err) // TODO: handle error properly
-	}
-	renderer, err := rendererCreator(ctx, h)
-	if err != nil {
-		panic(err) // TODO: handle error properly
+	var renderer Renderer
+	var setupErr error
+	if rendererCreator, err := RenderCreatorFromContext(ctx); err != nil {
+		setupErr = err
+	} else if renderer, err = rendererCreator(ctx, h); err != nil {
+		setupErr = err
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		h.handleFunc(r, func(ctx context.Context, props T) {
+			if setupErr != nil {
+				http.Error(w, setupErr.Error(), http.StatusInternalServerError)
+				return
+			}
+
 			res, err := renderer.Render(ctx, props)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
