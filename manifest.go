@@ -1,7 +1,10 @@
 package govite
 
+// Manifest は Vite のビルドマニフェスト (通常は .vite/manifest.json) を表します。
+// キーはソースファイルパス、値はビルドによって生成された対応する [Chunk] です。
 type Manifest map[string]*Chunk
 
+// Chunk は Vite のビルドマニフェストの 1 エントリーを表します。
 type Chunk struct {
 	File    string   `json:"file"`
 	Name    string   `json:"name"`
@@ -11,6 +14,8 @@ type Chunk struct {
 	Imports []string `json:"imports"`
 }
 
+// EntryPoint はマニフェストの中から Name が name と一致するエントリーチャンクを返します。
+// 該当するエントリーチャンクが存在しない場合は nil を返します。
 func (m Manifest) EntryPoint(name string) *Chunk {
 	for _, chunk := range m {
 		if chunk.Name == name && chunk.IsEntry {
@@ -20,7 +25,9 @@ func (m Manifest) EntryPoint(name string) *Chunk {
 	return nil
 }
 
-func (m Manifest) StyleSheetURLs(name string) []string {
+// StyleSheets は name で識別されるチャンクの CSS ファイル URL を返します。
+// 推移的にインポートされるすべてのチャンクの CSS URL も含まれます。重複する URL は除外されます。
+func (m Manifest) StyleSheets(name string) []string {
 	seen := make(map[string]bool)
 	urls := make([]string, 0)
 
@@ -48,7 +55,9 @@ func (m Manifest) StyleSheetURLs(name string) []string {
 	return urls
 }
 
-func (m Manifest) ModuleURL(name string) string {
+// Module は name で識別されるチャンクのハッシュ付き JavaScript モジュール URL を返します。
+// マニフェストにチャンクが存在しない場合は空文字列を返します。
+func (m Manifest) Module(name string) string {
 	chunk, ok := m[name]
 	if !ok {
 		return ""
@@ -57,7 +66,10 @@ func (m Manifest) ModuleURL(name string) string {
 	return chunk.File
 }
 
-func (m Manifest) PreloadModuleURLs(name string) []string {
+// PreloadModules は name で識別されるチャンクに対して <link rel="modulepreload"> タグに使用する
+// JavaScript モジュール URL を返します。推移的にインポートされるすべてのチャンクの URL も含まれます。
+// 重複する URL は除外されます。
+func (m Manifest) PreloadModules(name string) []string {
 	seen := make(map[string]bool)
 	urls := make([]string, 0)
 

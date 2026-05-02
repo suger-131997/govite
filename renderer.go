@@ -13,6 +13,10 @@ import (
 
 type renderCreatorContextKey struct{}
 
+// WithRenderCreatorForDev は開発モードのレンダラーファクトリーを ctx に付与します。
+// ファクトリーは初回使用時にエントリーポイントファイルと TypeScript の型定義を生成します。
+// htmlTemplate はページの骨格となる Go HTML テンプレート、defaultTitle はデフォルトのページタイトル、
+// viteServer は起動中の Vite 開発サーバーの URL、workdir はエントリーポイントファイルの出力先ディレクトリです。
 func WithRenderCreatorForDev(ctx context.Context, htmlTemplate, defaultTitle, viteServer, workdir string) (context.Context, error) {
 	tmpl, err := template.New("index").Parse(htmlTemplate)
 	if err != nil {
@@ -22,6 +26,9 @@ func WithRenderCreatorForDev(ctx context.Context, htmlTemplate, defaultTitle, vi
 	return context.WithValue(ctx, renderCreatorContextKey{}, newDevRendererCreator(tmpl, defaultTitle, viteServer, workdir)), nil
 }
 
+// WithRenderCreatorForProd は本番モードのレンダラーファクトリーを ctx に付与します。
+// htmlTemplate はページの骨格となる Go HTML テンプレート、defaultTitle はデフォルトのページタイトル、
+// m はハッシュ付きアセット URL の解決に使用する Vite ビルドの [Manifest] です。
 func WithRenderCreatorForProd(ctx context.Context, htmlTemplate, defaultTitle string, m Manifest) (context.Context, error) {
 	tmpl, err := template.New("index").Parse(htmlTemplate)
 	if err != nil {
@@ -31,6 +38,9 @@ func WithRenderCreatorForProd(ctx context.Context, htmlTemplate, defaultTitle st
 	return context.WithValue(ctx, renderCreatorContextKey{}, newProdRendererCreator(tmpl, defaultTitle, m)), nil
 }
 
+// RenderCreatorFromContext は [WithRenderCreatorForDev] または [WithRenderCreatorForProd] によって
+// ctx に格納されたレンダラーファクトリーを取り出します。
+// ファクトリーが見つからない場合、または格納された値の型が不正な場合はエラーを返します。
 func RenderCreatorFromContext(ctx context.Context) (func(ctx context.Context, handler pageHandler) (Renderer, error), error) {
 	value := ctx.Value(renderCreatorContextKey{})
 	if value == nil {
@@ -44,6 +54,7 @@ func RenderCreatorFromContext(ctx context.Context) (func(ctx context.Context, ha
 	return renderCreator, nil
 }
 
+// Renderer は指定した props でページをレンダリングし、HTML バイト列を返します。
 type Renderer interface {
 	Render(ctx context.Context, props any) ([]byte, error)
 }
@@ -157,9 +168,9 @@ func newProdRendererCreator(htmlTemplate *template.Template, defaultTitle string
 		return &prodRenderer{
 			htmlTemplate:   htmlTemplate,
 			defaultTitle:   defaultTitle,
-			styleSheets:    buildURLTags(`<link rel="stylesheet" href="/`, `">`, m.StyleSheetURLs(chunk.Src)...),
-			modules:        buildURLTags(`<script type="module" src="/`, `"></script>`, m.ModuleURL(chunk.Src)),
-			preloadModules: buildURLTags(`<link rel="modulepreload" href="/`, `">`, m.PreloadModuleURLs(chunk.Src)...),
+			styleSheets:    buildURLTags(`<link rel="stylesheet" href="/`, `">`, m.StyleSheets(chunk.Src)...),
+			modules:        buildURLTags(`<script type="module" src="/`, `"></script>`, m.Module(chunk.Src)),
+			preloadModules: buildURLTags(`<link rel="modulepreload" href="/`, `">`, m.PreloadModules(chunk.Src)...),
 		}, nil
 	}
 }
