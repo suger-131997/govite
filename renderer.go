@@ -13,6 +13,12 @@ import (
 
 type renderCreatorContextKey struct{}
 
+// WithRenderCreatorForDev attaches a development-mode renderer factory to ctx.
+// The factory generates entry point files and TypeScript type definitions on
+// first use. htmlTemplate is the Go HTML template for the page skeleton,
+// defaultTitle is the fallback page title, viteServer is the URL of the
+// running Vite dev server, and workdir is the directory where entry point
+// files are written.
 func WithRenderCreatorForDev(ctx context.Context, htmlTemplate, defaultTitle, viteServer, workdir string) (context.Context, error) {
 	tmpl, err := template.New("index").Parse(htmlTemplate)
 	if err != nil {
@@ -22,6 +28,10 @@ func WithRenderCreatorForDev(ctx context.Context, htmlTemplate, defaultTitle, vi
 	return context.WithValue(ctx, renderCreatorContextKey{}, newDevRendererCreator(tmpl, defaultTitle, viteServer, workdir)), nil
 }
 
+// WithRenderCreatorForProd attaches a production renderer factory to ctx.
+// htmlTemplate is the Go HTML template for the page skeleton, defaultTitle is
+// the fallback page title, and m is the Vite build [Manifest] used to resolve
+// hashed asset URLs.
 func WithRenderCreatorForProd(ctx context.Context, htmlTemplate, defaultTitle string, m Manifest) (context.Context, error) {
 	tmpl, err := template.New("index").Parse(htmlTemplate)
 	if err != nil {
@@ -31,6 +41,9 @@ func WithRenderCreatorForProd(ctx context.Context, htmlTemplate, defaultTitle st
 	return context.WithValue(ctx, renderCreatorContextKey{}, newProdRendererCreator(tmpl, defaultTitle, m)), nil
 }
 
+// RenderCreatorFromContext retrieves the renderer factory stored in ctx by
+// [WithRenderCreatorForDev] or [WithRenderCreatorForProd]. It returns an error
+// if no factory is found or if the stored value has an unexpected type.
 func RenderCreatorFromContext(ctx context.Context) (func(ctx context.Context, handler pageHandler) (Renderer, error), error) {
 	value := ctx.Value(renderCreatorContextKey{})
 	if value == nil {
@@ -44,6 +57,8 @@ func RenderCreatorFromContext(ctx context.Context) (func(ctx context.Context, ha
 	return renderCreator, nil
 }
 
+// Renderer renders a page with the given props and returns the resulting HTML
+// bytes.
 type Renderer interface {
 	Render(ctx context.Context, props any) ([]byte, error)
 }

@@ -1,7 +1,11 @@
 package govite
 
+// Manifest represents the Vite build manifest (typically .vite/manifest.json).
+// The keys are the source file paths and the values are the corresponding
+// [Chunk] entries produced by the build.
 type Manifest map[string]*Chunk
 
+// Chunk represents a single entry in the Vite build manifest.
 type Chunk struct {
 	File    string   `json:"file"`
 	Name    string   `json:"name"`
@@ -11,6 +15,8 @@ type Chunk struct {
 	Imports []string `json:"imports"`
 }
 
+// EntryPoint returns the entry [Chunk] whose Name matches name, or nil if no
+// such entry chunk exists in the manifest.
 func (m Manifest) EntryPoint(name string) *Chunk {
 	for _, chunk := range m {
 		if chunk.Name == name && chunk.IsEntry {
@@ -20,6 +26,9 @@ func (m Manifest) EntryPoint(name string) *Chunk {
 	return nil
 }
 
+// StyleSheetURLs returns the CSS file URLs for the chunk identified by name,
+// including those of all transitively imported chunks. Duplicate URLs are
+// omitted.
 func (m Manifest) StyleSheetURLs(name string) []string {
 	seen := make(map[string]bool)
 	urls := make([]string, 0)
@@ -48,6 +57,9 @@ func (m Manifest) StyleSheetURLs(name string) []string {
 	return urls
 }
 
+// ModuleURL returns the hashed JavaScript module URL for the chunk identified
+// by name. It returns an empty string if the chunk does not exist in the
+// manifest.
 func (m Manifest) ModuleURL(name string) string {
 	chunk, ok := m[name]
 	if !ok {
@@ -57,6 +69,9 @@ func (m Manifest) ModuleURL(name string) string {
 	return chunk.File
 }
 
+// PreloadModuleURLs returns the JavaScript module URLs suitable for
+// <link rel="modulepreload"> tags for the chunk identified by name, including
+// those of all transitively imported chunks. Duplicate URLs are omitted.
 func (m Manifest) PreloadModuleURLs(name string) []string {
 	seen := make(map[string]bool)
 	urls := make([]string, 0)
