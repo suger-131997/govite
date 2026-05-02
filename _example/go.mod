@@ -1,6 +1,6 @@
 module app
 
-go 1.25.0
+go 1.26.0
 
 replace github.com/suger-131997/govite => ../
 

@@ -1,6 +1,6 @@
 {
   "name": "govite",
-  "image": "mcr.microsoft.com/vscode/devcontainers/go:1.25-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/go:1.26-trixie",
   "workspaceFolder": "/workspace",
   "forwardPorts": [5173, 8080],
   "features": {
