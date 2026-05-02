@@ -172,9 +172,9 @@ func newProdRendererCreator(htmlTemplate *template.Template, defaultTitle string
 		return &prodRenderer{
 			htmlTemplate:   htmlTemplate,
 			defaultTitle:   defaultTitle,
-			styleSheets:    buildURLTags(`<link rel="stylesheet" href="/`, `">`, m.StyleSheetURLs(chunk.Src)...),
-			modules:        buildURLTags(`<script type="module" src="/`, `"></script>`, m.ModuleURL(chunk.Src)),
-			preloadModules: buildURLTags(`<link rel="modulepreload" href="/`, `">`, m.PreloadModuleURLs(chunk.Src)...),
+			styleSheets:    buildURLTags(`<link rel="stylesheet" href="/`, `">`, m.StyleSheets(chunk.Src)...),
+			modules:        buildURLTags(`<script type="module" src="/`, `"></script>`, m.Module(chunk.Src)),
+			preloadModules: buildURLTags(`<link rel="modulepreload" href="/`, `">`, m.PreloadModules(chunk.Src)...),
 		}, nil
 	}
 }

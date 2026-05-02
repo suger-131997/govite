@@ -15,6 +15,13 @@ func WithTitle(ctx context.Context, title string) context.Context {
 // TitleFromContext retrieves the page title stored in ctx by [WithTitle]. The
 // second return value is false if no title was set.
 func TitleFromContext(ctx context.Context) (string, bool) {
-	title, ok := ctx.Value(titleKey{}).(string)
+	value := ctx.Value(titleKey{})
+	if value == nil {
+		return "", false
+	}
+	title, ok := value.(string)
+	if !ok {
+		return "", false
+	}
 	return title, ok
 }

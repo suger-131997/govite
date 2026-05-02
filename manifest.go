@@ -26,10 +26,9 @@ func (m Manifest) EntryPoint(name string) *Chunk {
 	return nil
 }
 
-// StyleSheetURLs returns the CSS file URLs for the chunk identified by name,
-// including those of all transitively imported chunks. Duplicate URLs are
-// omitted.
-func (m Manifest) StyleSheetURLs(name string) []string {
+// StyleSheets returns the CSS file URLs for the chunk identified by name,
+// including those of all transitively imported chunks.
+func (m Manifest) StyleSheets(name string) []string {
 	seen := make(map[string]bool)
 	urls := make([]string, 0)
 
@@ -57,10 +56,10 @@ func (m Manifest) StyleSheetURLs(name string) []string {
 	return urls
 }
 
-// ModuleURL returns the hashed JavaScript module URL for the chunk identified
+// Module returns the hashed JavaScript module URL for the chunk identified
 // by name. It returns an empty string if the chunk does not exist in the
 // manifest.
-func (m Manifest) ModuleURL(name string) string {
+func (m Manifest) Module(name string) string {
 	chunk, ok := m[name]
 	if !ok {
 		return ""
@@ -69,10 +68,10 @@ func (m Manifest) ModuleURL(name string) string {
 	return chunk.File
 }
 
-// PreloadModuleURLs returns the JavaScript module URLs suitable for
+// PreloadModules returns the JavaScript module URLs suitable for
 // <link rel="modulepreload"> tags for the chunk identified by name, including
-// those of all transitively imported chunks. Duplicate URLs are omitted.
-func (m Manifest) PreloadModuleURLs(name string) []string {
+// those of all transitively imported chunks.
+func (m Manifest) PreloadModules(name string) []string {
 	seen := make(map[string]bool)
 	urls := make([]string, 0)
 
