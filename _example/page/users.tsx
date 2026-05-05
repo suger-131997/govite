@@ -1,4 +1,4 @@
-import type { UsersProps } from "~/types.gen.page.d.ts";
+import type { UsersProps } from "~/types.page.gen.d.ts";
 import Header from "~/components/Header";
 import "./users.css";
 

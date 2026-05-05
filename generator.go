@@ -269,7 +269,7 @@ func generatePropsTypeDef(pkgName string, propsTypes []reflect.Type) error {
 		buf.WriteString("\n")
 	}
 
-	return os.WriteFile(fmt.Sprintf("types.gen%s.d.ts", strings.ReplaceAll(pkgName, "/", ".")), buf.Bytes(), os.ModePerm)
+	return os.WriteFile(fmt.Sprintf("types%s.gen.d.ts", strings.ReplaceAll(pkgName, "/", ".")), buf.Bytes(), os.ModePerm)
 }
 
 func findModulePath() (string, error) {

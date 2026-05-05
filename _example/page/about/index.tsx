@@ -1,4 +1,4 @@
-import type { IndexProps } from "~/types.gen.page.about.d.ts";
+import type { IndexProps } from "~/types.page.about.gen.d.ts";
 import Header from "~/components/Header";
 import "../about.css";
 

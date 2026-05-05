@@ -1,4 +1,4 @@
-import type { AboutProps } from "~/types.gen.page.d.ts";
+import type { AboutProps } from "~/types.page.gen.d.ts";
 import Header from "~/components/Header";
 import "./about.css";
 
